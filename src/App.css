@@ -1,0 +1,140 @@
+/*     FIELD      */
+.cell_game, .cell {
+    width: 30px;
+    height: 30px;
+}
+
+table, .cell {
+    border: 1px solid #b4b4ff;
+}
+
+
+.cell.cell_ship {
+    background-color: rgba(0, 125, 204, 0.21)
+}
+
+.cell_miss, .cell_miss_auto {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.cell{
+    position: relative;
+}
+
+.cell_game:hover {
+    background: rgba(64, 191, 68, .05);
+    position: absolute;
+    margin: -2px;
+    cursor: pointer;
+    border: 2px solid #40bf44;
+}
+.cell_miss:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.cell.cell_die {
+    background-color: rgba(255, 0, 0, 0.63);
+    border-color: inherit;
+    cursor: inherit;
+}
+table {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.user .cell_hit{
+    background-color:  rgba(0, 125, 204, 0.21);
+}
+
+.cell.cell_hit .z::after, .cell.cell_hit .z::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background: red;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}.cell.cell_die .z::after, .cell.cell_die .z::before {
+     content: "";
+     position: absolute;
+     z-index: -1;
+     background: #000000;
+     -webkit-transform: rotate(-45deg);
+     -moz-transform: rotate(-45deg);
+     -ms-transform: rotate(-45deg);
+     transform: rotate(-45deg);
+ }
+.cell .z{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.cell.cell_hit .z::after,.cell.cell_die .z::after {
+    top: 50%;
+    height: 2px;
+    left: -25%;
+    width: 150%;
+    margin-left: -1px;
+}
+
+.cell.cell_hit .z::before, .cell.cell_die .z::before{
+    left: 50%;
+    width: 2px;
+    top: -25%;
+    height: 150%;
+    margin-top: 1px;
+}
+.cell.cell_miss .z{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 4px;
+    width: 4px;
+    background: #333;
+    border-radius: 50%;
+    margin-top: -2px;
+    margin-left: -2px;
+}
+.cell.cell_miss_auto .z{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 4px;
+    width: 4px;
+    background: #989898;
+    border-radius: 50%;
+    margin-top: -2px;
+    margin-left: -2px;
+}
+.cell_die, .cell_miss, .cell_hit{
+    border-color: inherit;
+    cursor: inherit;
+}
+/*       MAIN        */
+
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+.fields{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.field {
+    width: 350px;
+}
+@media screen and (max-width: 500px) {
+    .fields{
+        flex-direction: column;
+    }
+}
