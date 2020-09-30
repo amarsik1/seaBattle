@@ -9,7 +9,7 @@ class Field extends React.Component {
     render() {
         let {name} = this.props;
 
-        let css = {opacity: .6};
+        let css = {opacity: .6 };
 
         let field = this.props.field.map((arr, index) => {
             let row = arr.map((item, index) => {
@@ -24,14 +24,13 @@ class Field extends React.Component {
                                coordinates: item[0]
                            }) : null}>
                     <span className="z"/>
-                    {/*{item[1]}*/}
                 </td>;
             });
             return <tr key={index}>{row}</tr>;
         });
 
         return <div className="field" style={this.props.move === name || !this.props.gameStarted ? css : null}>
-            <h3>{name}</h3>
+            <h3>{name} field</h3>
             <table border="1px">
                 <tbody className={name}>
                 {field}

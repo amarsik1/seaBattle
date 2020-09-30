@@ -17,7 +17,7 @@ class App extends React.Component {
                     pos: [[1, 1, "life"], [1, 2, "life"], [1, 3, "life"], [1, 4, "life"]],
                     ready: true,
                     status: "life"
-                    },
+                },
                     {num: 3, pos: [[3, 2, "life"], [4, 2, "life"], [5, 2, "life"]], ready: true, status: "life"},
                     {num: 3, pos: [[9, 7, "life"], [9, 8, "life"], [9, 9, "life"]], ready: true, status: "life"},
                     {num: 2, pos: [[7, 0, "life"], [8, 0, "life"]], ready: true, status: "life"},
@@ -157,7 +157,7 @@ class App extends React.Component {
             res.ship.pos.map(pos => {
                 array[pos[0]][pos[1]][1] = res.status;
             });
-            if(this.shipsIsLive(info.player) === 10){
+            if (this.shipsIsLive(info.player) === 10) {
                 this.gameEnd(info.player);
             }
         } else
@@ -200,12 +200,12 @@ class App extends React.Component {
             // this.setState({pcShips: this.generateShips()});
             this.setState({gameStarted: true});
             this.renderUserShips();
-            this.setState({move:"user"});
+            this.setState({move: "user"});
         }
     };
 
     shipsIsLive = (player) => {
-        let ships = this.state[player+"Ships"];
+        let ships = this.state[player + "Ships"];
         let dead = 0;
         ships.map(ship => ship.status === "die" ? dead++ : null);
         return dead
@@ -237,7 +237,9 @@ class App extends React.Component {
 
     gameEnd(player) {
         this.setState({gameStarted: false});
-        alert("Проиграл "+player.toUpperCase())
+        this.setState({gameIsEnd: true});
+        alert("Проиграл " + player.toUpperCase())
+        document.location.reload();
     }
 
     render() {
@@ -248,7 +250,9 @@ class App extends React.Component {
                 <Field name="pc" click={this.clickToField} move={this.state.move} gameStarted={this.state.gameStarted}
                        field={this.state.pcField}/>
             </div>
-            <button onClick={this.startGame}>Start</button>
+            {this.state.gameStarted ? null :
+                <button onClick={this.startGame}>Start</button>
+            }
         </div>;
     }
 

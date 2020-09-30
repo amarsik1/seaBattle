@@ -133,6 +133,9 @@ table {
 .field {
     width: 350px;
 }
+h3{
+    text-align: center;
+}
 @media screen and (max-width: 500px) {
     .fields{
         flex-direction: column;
