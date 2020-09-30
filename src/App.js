@@ -154,6 +154,7 @@ class App extends React.Component {
         let array = this.state[name];
         let res = this.checkCoordinates(info.coordinates, this.state[info.player + "Ships"]);
         if (res.status === "die") {
+            // eslint-disable-next-line array-callback-return
             res.ship.pos.map(pos => {
                 array[pos[0]][pos[1]][1] = res.status;
             });
@@ -187,7 +188,9 @@ class App extends React.Component {
 
     renderUserShips = () => {
         let array = this.state.userField;
+        // eslint-disable-next-line array-callback-return
         this.state.userShips.map(ship => {
+            // eslint-disable-next-line array-callback-return
             ship.pos.map(pos => {
                 array[pos[0]][pos[1]][1] = 'ship';
             });
