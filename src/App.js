@@ -52,6 +52,20 @@ class App extends React.Component {
         return Math.round(rand);
     };
 
+    generateMissFields = (ship, array) => {
+        // eslint-disable-next-line array-callback-return
+        ship.pos.map((pos) => {
+            let mathArr = [[0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1]];
+            for (let i = 0; i < 8; i++) {
+                let posY = pos[0] + mathArr[i][0],
+                    posX = pos[1] + mathArr[i][1];
+                if (posX >= 0 && posX < 10 && posY < 10 && posY >= 0)
+                    array[posY][posX][1] = 'miss';
+            }
+        });
+        return null
+    };
+
     /*generateShips = () => {
         let arrayShips = [
             {
@@ -154,6 +168,9 @@ class App extends React.Component {
         let array = this.state[name];
         let res = this.checkCoordinates(info.coordinates, this.state[info.player + "Ships"]);
         if (res.status === "die") {
+            this.generateMissFields(res.ship, array);
+            if (info.player === "user")
+                this.setState({lastHit: null});
             // eslint-disable-next-line array-callback-return
             res.ship.pos.map(pos => {
                 array[pos[0]][pos[1]][1] = res.status;
@@ -166,6 +183,19 @@ class App extends React.Component {
         if (res === 'miss') {
             let nextMove = info.player === 'user' ? 'user' : 'pc';
             this.setState({move: nextMove});
+        }
+        if (res === 'hit') {
+            if (info.player === "user")
+                this.setState({lastHit: info.coordinates});
+            // рисует точки по диагонали при попадании
+            if (info.coordinates[0] + 1 < 10 && info.coordinates[1] + 1 < 10)
+                array[info.coordinates[0] + 1][info.coordinates[1] + 1][1] = "miss";
+            if (info.coordinates[0] + 1 < 10 && info.coordinates[1] - 1 >= 0)
+                array[info.coordinates[0] + 1][info.coordinates[1] - 1][1] = "miss";
+            if (info.coordinates[0] - 1 >= 0 && info.coordinates[1] + 1 < 10)
+                array[info.coordinates[0] - 1][info.coordinates[1] + 1][1] = "miss";
+            if (info.coordinates[0] - 1 >= 0 && info.coordinates[1] - 1 >= 0)
+                array[info.coordinates[0] - 1][info.coordinates[1] - 1][1] = "miss";
         }
         this.setState({[name]: array});
     };
@@ -223,13 +253,43 @@ class App extends React.Component {
         this.setFields();
     }
 
+    isEmptyField = (coord) => {
+        let field = this.state.userField;
+        let row = field[coord[0]];
+        let fieldN = row[coord[1]];
+        if (fieldN[1] === 'none' || fieldN[1] === 'ship')
+            return true;
+        return false
+    };
+
     movePC = () => {
-        let posX = this.getRandomNumber(0, 9),
-            posY = this.getRandomNumber(0, 9);
-        this.clickToField({
-            player: 'user',
-            coordinates: [posX, posY]
-        })
+        if (this.state.lastHit == null) {
+            let posX = this.getRandomNumber(0, 9),
+                posY = this.getRandomNumber(0, 9);
+            while (!this.isEmptyField([posY, posX])) {
+                posX = this.getRandomNumber(0, 9);
+                posY = this.getRandomNumber(0, 9);
+            }
+            setTimeout(this.clickToField({
+                player: 'user',
+                coordinates: [posY, posX]
+            }), 500);
+        } else {
+            let pos = this.state.lastHit;
+            let mathArr = [[0, -1], [-1, 0], [0, 1], [1, 0]];
+            for (let i = 0; i < mathArr.length; i++) {
+                let posY = pos[0] + mathArr[i][0],
+                    posX = pos[1] + mathArr[i][1];
+                if (posX >= 0 && posX < 10 && posY < 10 && posY >= 0 && this.isEmptyField([posY, posX])) {
+                    setTimeout(this.clickToField({
+                        player: 'user',
+                        coordinates: [posY, posX]
+                    }), 500);
+                    break;
+                }
+            }
+            this.setState({lastHit: null});
+        }
     };
 
     componentDidUpdate() {
@@ -241,7 +301,7 @@ class App extends React.Component {
     gameEnd(player) {
         this.setState({gameStarted: false});
         this.setState({gameIsEnd: true});
-        alert("Проиграл " + player.toUpperCase())
+        alert("Проиграл " + player.toUpperCase());
         document.location.reload();
     }
 
@@ -258,7 +318,6 @@ class App extends React.Component {
             }
         </div>;
     }
-
 }
 
 export default App;
